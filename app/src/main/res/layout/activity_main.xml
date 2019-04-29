@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:background="@color/color_background"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+    <Button
+
+            android:text="@string/zip_file"
+            android:layout_width="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/zip"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnZipFiles"
+            android:background="@drawable/bg_round"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.498"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.26"/>
+    <Button
+            android:text="@string/unzip_files"
+            android:drawableTop="@drawable/unzip"
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/btnZipFiles"
+            android:layout_width="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:drawablePadding="5dp"
+            android:background="@drawable/bg_round"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnUnZipFile" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:id="@+id/tvHelp"
+              android:textColor="@android:color/white"
+              android:textSize="16sp"
+              android:padding="2dp"
+              tools:text="Note: File is stored under sdcard."
+              app:layout_constraintTop_toTopOf="parent"
+              android:layout_marginTop="32dp" app:layout_constraintStart_toStartOf="parent"
+              android:layout_marginStart="16dp"/>
+
+    <TextView android:layout_width="0dp" android:layout_height="59dp"
+              android:id="@+id/tvGoToStorage"
+              android:textSize="16sp"
+              android:gravity="center"
+              android:textColor="@android:color/white"
+              android:textStyle="bold"
+              android:background="@color/color_light_background"
+              android:text="@string/go_to_storage"
+              android:textAllCaps="true"
+              app:layout_constraintBottom_toBottomOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
