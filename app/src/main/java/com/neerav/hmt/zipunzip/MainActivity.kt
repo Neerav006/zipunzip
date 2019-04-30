@@ -120,6 +120,25 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
+        btnExtract7ZipFile.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Permission is not granted
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1000
+                )
+            }
+            else{
+                // extract 7z file here
+
+            }
+
+        }
+
         tvHelp.text = "Note: File is stored under sdcard/zipUnzip folder"
     }
 
@@ -305,4 +324,14 @@ class MainActivity : AppCompatActivity() {
         else
             dialog.dismiss()
     }
+
+
+    fun extract7Zip(filePath:String, outPutPath: String) {
+
+
+
+
+    }
+
+
 }
