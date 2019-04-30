@@ -24,6 +24,8 @@ import java.lang.Exception
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.hzy.lib7z.IExtractCallback
+import com.hzy.lib7z.Z7Extractor
 
 
 class MainActivity : AppCompatActivity() {
@@ -131,10 +133,13 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1000
                 )
-            }
-            else{
+            } else {
                 // extract 7z file here
-
+                val intent = Intent()
+                intent.action = Intent.ACTION_OPEN_DOCUMENT
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "application/x-7z-compressed"
+                startActivityForResult(intent, 800)
             }
 
         }
@@ -166,6 +171,14 @@ class MainActivity : AppCompatActivity() {
                 UnZipTask(data.data!!).execute()
             }
 
+        }
+
+        // Extract 7z file
+        if (requestCode == 800 && resultCode == Activity.RESULT_OK) {
+
+            if (data != null && data.data != null) {
+                Extract7ZTask(data.data!!).execute()
+            }
         }
 
         if (uriList.isNotEmpty()) {
@@ -326,12 +339,97 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun extract7Zip(filePath:String, outPutPath: String) {
+    /**  Extract .7z files
+     *   @param uri input uri
+     *   @param outPutPath output location for store extracted files.
+     */
+    fun extract7Zip(uri: Uri, outPutPath: String) {
 
 
+        val tempDir = Environment.getExternalStorageDirectory().absolutePath + "/temp"
+        val tempFile = File(tempDir)
+        if (tempFile.isDirectory) {
+            FileUtils.cleanDirectory(tempFile)
+        }
+        try {
+            FileUtils.copyInputStreamToFile(contentResolver.openInputStream(uri), File(tempDir, "demo.7z"))
 
+            Z7Extractor.extractFile("$tempDir/demo.7z", outPutPath,
+                object : IExtractCallback {
+                    override fun onSucceed() {
+                        Toast.makeText(this@MainActivity, "File extracted successfully", Toast.LENGTH_LONG).show()
+
+                    }
+
+                    override fun onGetFileNum(fileNum: Int) {
+
+
+                    }
+
+                    override fun onProgress(name: String?, size: Long) {
+
+
+                    }
+
+                    override fun onError(errorCode: Int, message: String?) {
+                        Toast.makeText(this@MainActivity, "Error occurred!", Toast.LENGTH_LONG).show()
+
+
+                    }
+
+                    override fun onStart() {
+
+
+                    }
+
+                }
+
+
+            )
+
+        } catch (e: Exception) {
+            Log.e("exc", e.toString())
+        }
 
     }
 
+
+    /**
+     *    Asynch task for Extract 7Z   files
+     *
+     */
+    @SuppressLint("StaticFieldLeak")
+    inner class Extract7ZTask(private var uri: Uri) : AsyncTask<Void, Void, Void>() {
+
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            setDialog(true)
+        }
+
+        override fun doInBackground(vararg params: Void?): Void? {
+            val backupDBPath = Environment.getExternalStorageDirectory().absolutePath + "/zipUnzip"
+            val dir = File(backupDBPath)
+            if (!dir.exists()) {
+                dir.mkdir()
+
+                val innerDir = File(backupDBPath, "extract")
+                if (!innerDir.exists()) {
+                    innerDir.mkdir()
+                }
+            }
+
+            extract7Zip(uri, "$backupDBPath/extract")
+
+            return null
+        }
+
+
+        override fun onPostExecute(result: Void?) {
+            super.onPostExecute(result)
+            setDialog(false)
+            Toast.makeText(this@MainActivity, "file  Extracted..", Toast.LENGTH_LONG).show()
+        }
+    }
 
 }
