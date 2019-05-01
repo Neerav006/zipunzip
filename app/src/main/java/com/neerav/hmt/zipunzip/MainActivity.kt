@@ -251,6 +251,7 @@ class MainActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             Log.e("ex", e.toString())
+            throw  e
         } finally {
 
         }
@@ -279,6 +280,7 @@ class MainActivity : AppCompatActivity() {
             zipFile.extractAll(outPutPath)
         } catch (e: Exception) {
             Log.e("exc", e.toString())
+            throw e
         }
 
 
@@ -292,6 +294,8 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("StaticFieldLeak")
     inner class ZipTask(private var uriList: ArrayList<Uri>) : AsyncTask<Void, Void, Void>() {
 
+        private var isOk = true
+
         override fun doInBackground(vararg params: Void?): Void? {
             val backupDBPath = Environment.getExternalStorageDirectory().absolutePath + "/zipUnzip"
             val dir = File(backupDBPath)
@@ -302,9 +306,20 @@ class MainActivity : AppCompatActivity() {
                 if (!innerDir.exists()) {
                     innerDir.mkdir()
                 }
+            } else {
+                val innerDir = File(backupDBPath, "compress")
+                if (!innerDir.exists()) {
+                    innerDir.mkdir()
+                }
             }
             Log.e("path", backupDBPath)
-            makeZipFile(uriList = uriList, outPutPath = "$backupDBPath/compress")
+            try {
+                makeZipFile(uriList = uriList, outPutPath = "$backupDBPath/compress")
+            } catch (e: Exception) {
+                isOk = false
+            }
+
+
             return null
         }
 
@@ -312,7 +327,8 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             setDialog(false)
-            Toast.makeText(this@MainActivity, "file  zipped", Toast.LENGTH_LONG).show()
+            if (isOk)
+                Toast.makeText(this@MainActivity, "file  zipped", Toast.LENGTH_LONG).show()
         }
 
         override fun onPreExecute() {
@@ -329,6 +345,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("StaticFieldLeak")
     inner class UnZipTask(private var uri: Uri) : AsyncTask<Void, Void, Void>() {
 
+        private var isOk = true
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -345,9 +362,19 @@ class MainActivity : AppCompatActivity() {
                 if (!innerDir.exists()) {
                     innerDir.mkdir()
                 }
+            } else {
+                val innerDir = File(backupDBPath, "extract")
+                if (!innerDir.exists()) {
+                    innerDir.mkdir()
+                }
             }
 
-            unZip(uri, "$backupDBPath/extract")
+            try {
+                unZip(uri, "$backupDBPath/extract")
+            } catch (e: Exception) {
+                isOk = false
+            }
+
 
             return null
         }
@@ -356,7 +383,8 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             setDialog(false)
-            Toast.makeText(this@MainActivity, "file  Unzipped", Toast.LENGTH_LONG).show()
+            if (isOk)
+                Toast.makeText(this@MainActivity, "file  Unzipped", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -420,6 +448,7 @@ class MainActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             Log.e("exc", e.toString())
+            throw  e
         }
 
     }
