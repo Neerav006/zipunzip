@@ -11,7 +11,7 @@
 
             android:text="@string/zip_file"
             android:layout_width="wrap_content"
-            android:drawablePadding="10dp"
+            android:drawablePadding="5dp"
             android:drawableTop="@drawable/zip"
             android:layout_height="wrap_content"
             android:id="@+id/btnZipFiles"
