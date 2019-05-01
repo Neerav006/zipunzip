@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onSucceed() {
                         Toast.makeText(this@MainActivity, "File extracted successfully", Toast.LENGTH_LONG).show()
 
-                    }
+                     }
 
                     override fun onGetFileNum(fileNum: Int) {
 
