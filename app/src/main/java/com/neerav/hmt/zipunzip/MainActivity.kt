@@ -26,6 +26,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.hzy.lib7z.IExtractCallback
 import com.hzy.lib7z.Z7Extractor
+import com.hzy.libp7zip.ExitCode
+import com.hzy.libp7zip.P7ZipApi
 
 
 class MainActivity : AppCompatActivity() {
@@ -144,6 +146,27 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
+        btnExtractRAR.setOnClickListener {
+
+            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Permission is not granted
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1000
+                )
+            } else {
+                val intent = Intent()
+                intent.action = Intent.ACTION_OPEN_DOCUMENT
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "*/*"
+                startActivityForResult(intent, 1200)
+            }
+        }
+
         tvHelp.text = "Note: File is stored under sdcard/zipUnzip folder"
     }
 
@@ -179,6 +202,14 @@ class MainActivity : AppCompatActivity() {
             if (data != null && data.data != null) {
                 Extract7ZTask(data.data!!).execute()
             }
+        }
+
+        // Extract .rar file
+        if (requestCode == 1200 && resultCode == Activity.RESULT_OK) {
+            if (data != null && data.data != null) {
+                ExtractRARTask(uri = data.data!!).execute()
+            }
+
         }
 
         if (uriList.isNotEmpty()) {
@@ -359,7 +390,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onSucceed() {
                         Toast.makeText(this@MainActivity, "File extracted successfully", Toast.LENGTH_LONG).show()
 
-                     }
+                    }
 
                     override fun onGetFileNum(fileNum: Int) {
 
@@ -429,6 +460,90 @@ class MainActivity : AppCompatActivity() {
             super.onPostExecute(result)
             setDialog(false)
             Toast.makeText(this@MainActivity, "file  Extracted..", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    /** Extract the rar file
+     *   @param uri input file
+     *   @param outPutPath output location for storage
+     */
+    fun extractRAR(uri: Uri, outPutPath: String): Int {
+
+        var result = 0
+
+        val tempDir = Environment.getExternalStorageDirectory().absolutePath + "/temp"
+        val tempFile = File(tempDir)
+        if (tempFile.isDirectory) {
+            FileUtils.cleanDirectory(tempFile)
+        }
+        try {
+            FileUtils.copyInputStreamToFile(contentResolver.openInputStream(uri), File(tempDir, "demo.rar"))
+
+            val command = Command.getExtractCmd("$tempDir/demo.rar", outPutPath)
+            result = P7ZipApi.executeCommand(command)
+
+        } catch (e: Exception) {
+            Log.e("exc", e.toString())
+        }
+
+        return result
+    }
+
+
+    /**
+     *    Asynch task for Extract 7Z   files
+     *
+     */
+    @SuppressLint("StaticFieldLeak")
+    inner class ExtractRARTask(private var uri: Uri) : AsyncTask<Void, Void, Void>() {
+
+        private var result: Int = -1000
+        override fun onPreExecute() {
+            super.onPreExecute()
+            setDialog(true)
+        }
+
+        override fun doInBackground(vararg params: Void?): Void? {
+            val backupDBPath = Environment.getExternalStorageDirectory().absolutePath + "/zipUnzip"
+            val dir = File(backupDBPath)
+            if (!dir.exists()) {
+                dir.mkdir()
+
+                val innerDir = File(backupDBPath, "extract")
+                if (!innerDir.exists()) {
+                    innerDir.mkdir()
+                }
+            }
+
+            this.result = extractRAR(uri, "$backupDBPath/extract")
+
+            return null
+        }
+
+
+        override fun onPostExecute(result: Void?) {
+            super.onPostExecute(result)
+            setDialog(false)
+
+            when {
+                this.result == ExitCode.EXIT_OK -> Toast.makeText(
+                    this@MainActivity,
+                    "file  Extracted..",
+                    Toast.LENGTH_LONG
+                ).show()
+                this.result == ExitCode.EXIT_NOT_SUPPORT -> Toast.makeText(
+                    this@MainActivity,
+                    "File type Not Supported..",
+                    Toast.LENGTH_LONG
+                ).show()
+                this.result == ExitCode.EXIT_CMD_ERROR -> Toast.makeText(
+                    this@MainActivity,
+                    "Error occurred..",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
         }
     }
 
