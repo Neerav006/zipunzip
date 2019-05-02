@@ -5,7 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_zip_unzip.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -30,7 +30,7 @@ import com.hzy.libp7zip.ExitCode
 import com.hzy.libp7zip.P7ZipApi
 
 
-class MainActivity : AppCompatActivity() {
+class ZipUnZipActivity : AppCompatActivity() {
 
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: AlertDialog
@@ -38,13 +38,13 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_zip_unzip)
 
-        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this@MainActivity,
+                this@ZipUnZipActivity,
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 1000
             )
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        builder = AlertDialog.Builder(this@MainActivity)
+        builder = AlertDialog.Builder(this@ZipUnZipActivity)
         builder.setView(R.layout.progress_dialog)
         dialog = builder.create()
         dialog.setCancelable(false)
@@ -60,12 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         btnZipFiles.setOnClickListener {
 
-            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
             ) {
                 // Permission is not granted
                 ActivityCompat.requestPermissions(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1000
                 )
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // if you reach this place, it means there is no any file
                 // explorer app installed on your device
-                Toast.makeText(this@MainActivity, "Install Any File Manager!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ZipUnZipActivity, "Install Any File Manager!", Toast.LENGTH_LONG).show()
             }
 
 
@@ -104,12 +104,12 @@ class MainActivity : AppCompatActivity() {
 
         btnUnZipFile.setOnClickListener {
 
-            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
             ) {
                 // Permission is not granted
                 ActivityCompat.requestPermissions(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1000
                 )
@@ -126,12 +126,12 @@ class MainActivity : AppCompatActivity() {
 
 
         btnExtract7ZipFile.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
             ) {
                 // Permission is not granted
                 ActivityCompat.requestPermissions(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1000
                 )
@@ -149,12 +149,12 @@ class MainActivity : AppCompatActivity() {
 
         btnExtractRAR.setOnClickListener {
 
-            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
             ) {
                 // Permission is not granted
                 ActivityCompat.requestPermissions(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1000
                 )
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity() {
             super.onPostExecute(result)
             setDialog(false)
             if (isOk)
-                Toast.makeText(this@MainActivity, "file  zipped", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ZipUnZipActivity, "file  zipped", Toast.LENGTH_LONG).show()
         }
 
         override fun onPreExecute() {
@@ -384,7 +384,7 @@ class MainActivity : AppCompatActivity() {
             super.onPostExecute(result)
             setDialog(false)
             if (isOk)
-                Toast.makeText(this@MainActivity, "file  Unzipped", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ZipUnZipActivity, "file  Unzipped", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -416,7 +416,7 @@ class MainActivity : AppCompatActivity() {
             Z7Extractor.extractFile("$tempDir/demo.7z", outPutPath,
                 object : IExtractCallback {
                     override fun onSucceed() {
-                        Toast.makeText(this@MainActivity, "File extracted successfully", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ZipUnZipActivity, "File extracted successfully", Toast.LENGTH_LONG).show()
 
                     }
 
@@ -431,7 +431,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onError(errorCode: Int, message: String?) {
-                        Toast.makeText(this@MainActivity, "Error occurred!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ZipUnZipActivity, "Error occurred!", Toast.LENGTH_LONG).show()
 
 
                     }
@@ -488,7 +488,7 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
             setDialog(false)
-            Toast.makeText(this@MainActivity, "file  Extracted..", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@ZipUnZipActivity, "file  Extracted..", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -557,17 +557,17 @@ class MainActivity : AppCompatActivity() {
 
             when {
                 this.result == ExitCode.EXIT_OK -> Toast.makeText(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     "file  Extracted..",
                     Toast.LENGTH_LONG
                 ).show()
                 this.result == ExitCode.EXIT_NOT_SUPPORT -> Toast.makeText(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     "File type Not Supported..",
                     Toast.LENGTH_LONG
                 ).show()
                 this.result == ExitCode.EXIT_CMD_ERROR -> Toast.makeText(
-                    this@MainActivity,
+                    this@ZipUnZipActivity,
                     "Error occurred..",
                     Toast.LENGTH_LONG
                 ).show()
