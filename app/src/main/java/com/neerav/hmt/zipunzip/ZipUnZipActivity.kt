@@ -24,6 +24,8 @@ import java.lang.Exception
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.hzy.lib7z.IExtractCallback
 import com.hzy.lib7z.Z7Extractor
 import com.hzy.libp7zip.ExitCode
@@ -35,10 +37,14 @@ class ZipUnZipActivity : AppCompatActivity() {
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: AlertDialog
 
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zip_unzip)
+
+        val adRequest = AdRequest.Builder().build()
+        adView?.loadAd(adRequest)
 
         if (ContextCompat.checkSelfPermission(this@ZipUnZipActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
