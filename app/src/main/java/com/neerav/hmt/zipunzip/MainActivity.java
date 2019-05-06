@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle("Home");
 
         loopingViewPager = findViewById(R.id.vpAds);
-        GetBanner getBanner = RetrofitClient.getClient("http://patidar.codefuelindia.com/").create(GetBanner.class);
+        GetBanner getBanner = RetrofitClient.getClient("http://dnote.xyz/advertise/").create(GetBanner.class);
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
                     if (bannerArrayList != null && bannerArrayList.size() > 0) {
 
                         for (int i = 0; i < bannerArrayList.size(); i++) {
-                            XMENArray.add("http://patidar.codefuelindia.com/".concat("banner/").concat(bannerArrayList.get(i).getImage()));
+                            XMENArray.add("http://dnote.xyz/advertise/".concat("banner/").concat(bannerArrayList.get(i).getImage()));
                         }
 
 
