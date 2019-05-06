@@ -1,12 +1,14 @@
 package com.neerav.hmt.zipunzip
 
 import androidx.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry.*
 import androidx.test.runner.AndroidJUnit4
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import androidx.test.InstrumentationRegistry.getTargetContext as getTargetContext1
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -18,7 +20,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
+        val appContext = getTargetContext1()
         assertEquals("com.neerav.hmt.zipunzip", appContext.packageName)
     }
 }
