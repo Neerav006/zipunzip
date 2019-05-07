@@ -1,6 +1,7 @@
 package com.neerav.hmt.zipunzip;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -106,7 +107,17 @@ public class MainActivity extends AppCompatActivity
 
 
                         final AutoScrollpagerAdapter autoScrollpagerAdapter =
-                                new AutoScrollpagerAdapter(MainActivity.this, XMENArray, true);
+                                new AutoScrollpagerAdapter((url, webSite) -> {
+
+                                    if (webSite != null && webSite.startsWith("http")) {
+
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(webSite));
+                                        startActivity(i);
+                                    }
+
+
+                                }, MainActivity.this, bannerArrayList, true);
 
                         loopingViewPager.setAdapter(autoScrollpagerAdapter);
                     }
