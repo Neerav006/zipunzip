@@ -2,10 +2,12 @@ package com.neerav.hmt.zipunzip;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private LoopingViewPager loopingViewPager;
     private ArrayList<String> XMENArray = new ArrayList<>();
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,9 @@ public class MainActivity extends AppCompatActivity
         // MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
         MobileAds.initialize(MainActivity.this, "ca-app-pub-3940256099942544~3347511713");
 
-
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 
         if (getSupportActionBar() != null)
@@ -62,6 +67,12 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, ZipUnZipActivity.class);
                 startActivity(i);
+
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -162,6 +173,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Log.d("TAG", "The interstitial wasn't loaded yet.");
+        }
     }
 
     /**
