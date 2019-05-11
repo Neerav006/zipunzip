@@ -12,7 +12,7 @@
 
     <com.asksira.loopingviewpager.LoopingViewPager
             android:id="@+id/vpAds"
-            android:layout_width="424dp"
+            android:layout_width="0dp"
             android:layout_height="186dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.36"/>
+            app:layout_constraintVertical_bias="0.20"/>
 
 
     <TextView
