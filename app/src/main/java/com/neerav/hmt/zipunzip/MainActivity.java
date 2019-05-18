@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.gms.ads.AdRequest;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private LoopingViewPager loopingViewPager;
     private ArrayList<String> XMENArray = new ArrayList<>();
     private InterstitialAd mInterstitialAd;
+    private AdView mAdView;
+    private LinearLayout llZipUnZip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,24 @@ public class MainActivity extends AppCompatActivity
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
+
+        mAdView = findViewById(R.id.bannerAd);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        llZipUnZip = findViewById(R.id.llZipUnZip);
+
+        llZipUnZip.setOnClickListener(v ->{
+            Intent i = new Intent(MainActivity.this, ZipUnZipActivity.class);
+            startActivity(i);
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                Log.d("TAG", "The interstitial wasn't loaded yet.");
+            }
+
+        });
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
