@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-        MobileAds.initialize(MainActivity.this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(MainActivity.this, "ca-app-pub-5043599433354824~6525080675");
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-5043599433354824/7790060882");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 
