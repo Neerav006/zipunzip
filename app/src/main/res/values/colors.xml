@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="color_background">#323863</color>
     <color name="color_light_background">#30fafafa</color>
+    <color name="colorBlueLight">#427FE1</color>
 
     <color name="primary1">#b32828</color>
     <color name="bg_primary1">#fffafa</color>

@@ -1,12 +1,18 @@
 package com.neerav.hmt.zipunzip;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.asksira.loopingviewpager.LoopingViewPager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private InterstitialAd mInterstitialAd;
     private AdView mAdView;
     private LinearLayout llZipUnZip;
+    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,29 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        constraintLayout = findViewById(R.id.constraintMain);
+
+
+        //Glide image
+
+        Glide.with(MainActivity.this)
+                .load(R.drawable.zip_background)
+                .into(new CustomTarget<Drawable>() {
+
+
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        constraintLayout.setBackground(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Remove the Drawable provided in onResourceReady from any Views and ensure
+                        // no references to it remain.
+                    }
+                });
+
 
         // MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
         MobileAds.initialize(MainActivity.this, "ca-app-pub-5043599433354824~6525080675");
@@ -63,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         llZipUnZip = findViewById(R.id.llZipUnZip);
 
-        llZipUnZip.setOnClickListener(v ->{
+        llZipUnZip.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, ZipUnZipActivity.class);
             startActivity(i);
 
